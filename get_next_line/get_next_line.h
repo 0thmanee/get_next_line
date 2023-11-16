@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:25:24 by obouchta          #+#    #+#             */
-/*   Updated: 2023/11/15 17:27:36 by obouchta         ###   ########.fr       */
+/*   Updated: 2023/11/16 15:14:38 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,8 @@ typedef struct str_list
 # endif
 
 char	*get_next_line(int fd);
+int		ft_strchr(char *str, char c);
+void	ft_lstadd_back(str_list **lst, str_list *new);
+char	*ft_strdup(const char *str,int mode, int len);
 
 #endif
