@@ -1,16 +1,56 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   dyal_mstapha.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:25:45 by obouchta          #+#    #+#             */
-/*   Updated: 2023/11/18 21:30:05 by obouchta         ###   ########.fr       */
+/*   Updated: 2023/11/18 18:33:48 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+int	ft_strchr(char *buffer, int c)
+{
+	int	i;
+
+	i = 0;
+	while (buffer[i])
+	{
+		if (buffer[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	len;
+
+	len = 0;
+	while (s[len] != '\0')
+		len++;
+	return (len);
+}
+
+char	*ft_strcpy(char *dest, char *src)
+{
+	int	i;
+
+	if (!dest || !src)
+		return (NULL);
+	i = 0;
+	while (src[i])
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
 
 char	*ft_strjoin(char *total_str, char *buffer)
 {
@@ -98,17 +138,18 @@ char	*new_total(char *total_str)
 		i++;
 	if (total_str[i] == '\n')
 	{
-		while (total_str[i++])
-			len++;
-		if (len)
+		i++;
+		while (total_str[i])
 		{
-			new_t = (char *)malloc(len + 1);
-			if (!new_t)
-				return (NULL);
-			ft_strcpy(new_t, total_str + i - len);
-			free(total_str);
-			return (new_t);
+			i++;
+			len++;
 		}
+		new_t = (char *)malloc(len + 1);
+		if (!new_t)
+			return (NULL);
+		ft_strcpy(new_t, total_str + i - len);
+		free(total_str);
+		return (new_t);
 	}
 	return (NULL);
 }
