@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 18:18:09 by obouchta          #+#    #+#             */
-/*   Updated: 2023/11/18 21:29:41 by obouchta         ###   ########.fr       */
+/*   Updated: 2023/11/22 10:39:13 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,48 @@ char	*ft_strcpy(char *dest, char *src)
 	}
 	dest[i] = '\0';
 	return (dest);
+}
+
+char	*ft_strdup(const char *str)
+{
+	char	*dest;
+	size_t	srclen;
+	size_t	i;
+
+	if (!str)
+		return (NULL);
+	srclen = ft_strlen(str);
+	dest = (char *)malloc(srclen + 1);
+	if (!dest)
+		return (NULL);
+	i = 0;
+	while (str[i])
+	{
+		dest[i] = str[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
+char	*ft_strjoin(char *total_str, char *buffer)
+{
+	char	*s3;
+	int		total_len;
+
+	if (!total_str)
+	{
+		total_str = (char *)malloc(1);
+		if (!total_str)
+			return (free(buffer), NULL);
+		total_str[0] = '\0';
+	}
+	total_len = ft_strlen(total_str) + ft_strlen(buffer);
+	s3 = (char *)malloc(total_len + 1);
+	if (!s3)
+		return (free_total(total_str), free(buffer), NULL);
+	ft_strcpy(s3, total_str);
+	ft_strcpy(s3 + ft_strlen(total_str), buffer);
+	free_total(total_str);
+	return (s3);
 }

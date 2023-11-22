@@ -1,5 +1,10 @@
 #include "get_next_line.h"
 
+void func(int i)
+{
+	i++;
+}
+
 int	main(void)
 {
 	char	*line;
@@ -10,12 +15,14 @@ int	main(void)
 
 	fd = open("1.txt", O_RDONLY);
 	line = get_next_line(fd);
-	while (line)
+	i = 0;
+	func(i);
+
+	while (i++ < 10)
 	{
-		printf("%d==>%s", i,line);
+		printf("%d ==> (%s)\n", i,line);
 		free(line);
 		line = get_next_line(fd);
-		i++;
 	}
 	close(fd);
 }

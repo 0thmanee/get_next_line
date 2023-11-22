@@ -6,55 +6,35 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:25:45 by obouchta          #+#    #+#             */
-/*   Updated: 2023/11/18 21:30:05 by obouchta         ###   ########.fr       */
+/*   Updated: 2023/11/22 10:40:07 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-char	*ft_strjoin(char *total_str, char *buffer)
-{
-	char	*s3;
-	int		total_len;
-	
-	if (!total_str)
-	{
-		total_str = (char *)malloc(1);
-		if (!total_str)
-			return (NULL);
-		total_str[0] = '\0';
-	}
-	total_len = ft_strlen(total_str) + ft_strlen(buffer);
-	s3 = (char *)malloc(total_len + 1);
-	if (!s3)
-		return (NULL);
-	ft_strcpy(s3, total_str);
-	ft_strcpy(s3 + ft_strlen(total_str), buffer);
-	free(total_str);
-	return (s3);
-}
 
 char	*read_file(char *total_str, int fd)
 {
 	char	*buffer;
 	int		bytes;
 
-	buffer = NULL;
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buffer)
-		return (free(total_str), NULL);
+		return (free_total(total_str), NULL);
 	bytes = 1;
 	while (bytes)
 	{
 		bytes = read(fd, buffer, BUFFER_SIZE);
 		if (bytes < 0)
-			return (free(buffer), free(total_str), NULL);
+			return (free_total(total_str), free(buffer), NULL);
 		buffer[bytes] = '\0';
-		total_str = ft_strjoin(total_str, buffer);
-		if (!total_str)
-			return (free(buffer), NULL);
-		if (ft_strchr(buffer, '\n'))
-        	break;
+		if (bytes)
+		{
+			total_str = ft_strjoin(total_str, buffer);
+			if (!total_str)
+				return (free(buffer), NULL);
+			if (ft_strchr(buffer, '\n'))
+				break ;
+		}
 	}
 	free(buffer);
 	return (total_str);
@@ -66,7 +46,7 @@ char	*extract_line(char *total_str)
 	int		len;
 	int		i;
 
-	if (!total_str)
+	if (!total_str || !total_str[0])
 		return (NULL);
 	len = 0;
 	while (total_str[len] && total_str[len] != '\n')
@@ -75,7 +55,7 @@ char	*extract_line(char *total_str)
 		len++;
 	line = (char *)malloc(len + 1);
 	if (!line)
-		return (NULL);
+		return (free_total(total_str), NULL);
 	i = 0;
 	while (total_str[i] && i < len)
 	{
@@ -86,7 +66,7 @@ char	*extract_line(char *total_str)
 	return (line);
 }
 
-char	*new_total(char *total_str)
+char	*new_total(t_data *total_data)
 {
 	char	*new_t;
 	int		i;
@@ -94,40 +74,56 @@ char	*new_total(char *total_str)
 
 	i = 0;
 	len = 0;
-	while (total_str[i] && total_str[i] != '\n')
+	while (total_data->total_str[i] && total_data->total_str[i] != '\n')
 		i++;
-	if (total_str[i] == '\n')
+	while (total_data->total_str[i++])
+		len++;
+	if (len)
 	{
-		while (total_str[i++])
-			len++;
-		if (len)
-		{
-			new_t = (char *)malloc(len + 1);
-			if (!new_t)
-				return (NULL);
-			ft_strcpy(new_t, total_str + i - len);
-			free(total_str);
-			return (new_t);
-		}
+		new_t = (char *)malloc(len + 1);
+		if (!new_t)
+			return (free_total(total_data->total_str), NULL);
+		ft_strcpy(new_t, total_data->total_str + i - len);
+		free_total(total_data->total_str);
+		return (new_t);
 	}
-	return (NULL);
+	else
+	{
+		total_data->end_file = 1;
+		return (total_data->total_str);
+	}
+}
+
+void	free_total(char *total_str)
+{
+	if (total_str)
+	{
+		free(total_str);
+		total_str = NULL;
+	}
+	
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*total_str;
-	char		*line;
-	
+	static t_data	total_data;
+	char			*line;
+
 	if (fd < 0 || BUFFER_SIZE < 0)
 		return (NULL);
-	total_str = read_file(total_str, fd);
-	if (!total_str)
-		return (NULL);
-	line = extract_line(total_str);
-	if (!line)
-		return (NULL);
-	total_str = new_total(total_str);
-	if (!total_str)
-		return (NULL);
-	return (line);
+	if (total_data.end_file != 1)
+	{
+		total_data.total_str = read_file(total_data.total_str, fd);
+		if (!total_data.total_str)
+			return (NULL);
+		line = extract_line(total_data.total_str);
+		if (!line)
+			return (free_total(total_data.total_str), NULL);
+		total_data.total_str = new_total(&total_data);
+		if (!total_data.total_str)
+			return (free(line), NULL);
+		return (line);
+	}
+	else
+		return (free_total(total_data.total_str), NULL);
 }

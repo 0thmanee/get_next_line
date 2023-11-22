@@ -1,56 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dyal_mstapha.c                                     :+:      :+:    :+:   */
+/*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:25:45 by obouchta          #+#    #+#             */
-/*   Updated: 2023/11/18 18:33:48 by obouchta         ###   ########.fr       */
+/*   Updated: 2023/11/20 22:28:18 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-int	ft_strchr(char *buffer, int c)
-{
-	int	i;
-
-	i = 0;
-	while (buffer[i])
-	{
-		if (buffer[i] == c)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	len;
-
-	len = 0;
-	while (s[len] != '\0')
-		len++;
-	return (len);
-}
-
-char	*ft_strcpy(char *dest, char *src)
-{
-	int	i;
-
-	if (!dest || !src)
-		return (NULL);
-	i = 0;
-	while (src[i])
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
 
 char	*ft_strjoin(char *total_str, char *buffer)
 {
@@ -126,7 +86,7 @@ char	*extract_line(char *total_str)
 	return (line);
 }
 
-char	*new_total(char *total_str)
+char	*new_total(t_data *total_data)
 {
 	char	*new_t;
 	int		i;
@@ -134,41 +94,45 @@ char	*new_total(char *total_str)
 
 	i = 0;
 	len = 0;
-	while (total_str[i] && total_str[i] != '\n')
+	while (total_data->total_str[i] && total_data->total_str[i] != '\n')
 		i++;
-	if (total_str[i] == '\n')
+	while (total_data->total_str[i++])
+		len++;
+	if (len)
 	{
-		i++;
-		while (total_str[i])
-		{
-			i++;
-			len++;
-		}
 		new_t = (char *)malloc(len + 1);
 		if (!new_t)
 			return (NULL);
-		ft_strcpy(new_t, total_str + i - len);
-		free(total_str);
-		return (new_t);
+		ft_strcpy(new_t, total_data->total_str + i - len);
 	}
-	return (NULL);
+	else
+	{
+		new_t = ft_strdup("");
+		total_data->check_end = 1;
+	}
+	free(total_data->total_str);
+	return (new_t);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*total_str;
-	char		*line;
+	static t_data	total_data;
+	char			*line;
 	
 	if (fd < 0 || BUFFER_SIZE < 0)
 		return (NULL);
-	total_str = read_file(total_str, fd);
-	if (!total_str)
-		return (NULL);
-	line = extract_line(total_str);
-	if (!line)
-		return (NULL);
-	total_str = new_total(total_str);
-	if (!total_str)
-		return (NULL);
-	return (line);
+	if (total_data.check_end != 1)
+	{
+		total_data.total_str = read_file(total_data.total_str, fd);
+		if (!total_data.total_str)
+			return (NULL);
+		line = extract_line(total_data.total_str);
+		if (!line)
+			return (NULL);
+		total_data.total_str = new_total(&total_data);
+		if (!total_data.total_str)
+			return (NULL);
+		return (line);
+	}
+	return (NULL);
 }
