@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 18:18:09 by obouchta          #+#    #+#             */
-/*   Updated: 2023/11/22 10:39:13 by obouchta         ###   ########.fr       */
+/*   Updated: 2023/11/22 11:50:51 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	*ft_strdup(const char *str)
 char	*ft_strjoin(char *total_str, char *buffer)
 {
 	char	*s3;
-	int		total_len;
+	size_t	total_len;
 
 	if (!total_str)
 	{
@@ -89,9 +89,9 @@ char	*ft_strjoin(char *total_str, char *buffer)
 	total_len = ft_strlen(total_str) + ft_strlen(buffer);
 	s3 = (char *)malloc(total_len + 1);
 	if (!s3)
-		return (free_total(total_str), free(buffer), NULL);
+		return (free_total(&total_str), free(buffer), NULL);
 	ft_strcpy(s3, total_str);
 	ft_strcpy(s3 + ft_strlen(total_str), buffer);
-	free_total(total_str);
+	free_total(&total_str);
 	return (s3);
 }

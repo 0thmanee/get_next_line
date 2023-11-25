@@ -1,24 +1,16 @@
 #include "get_next_line.h"
 
-void func(int i)
-{
-	i++;
-}
-
 int	main(void)
 {
 	char	*line;
 	int		fd;
-	int i = 1;
-	
+	int	i;
 	// atexit(f);
 
 	fd = open("1.txt", O_RDONLY);
 	line = get_next_line(fd);
 	i = 0;
-	func(i);
-
-	while (i++ < 10)
+	while (line)
 	{
 		printf("%d ==> (%s)\n", i,line);
 		free(line);

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:25:45 by obouchta          #+#    #+#             */
-/*   Updated: 2023/11/22 10:40:07 by obouchta         ###   ########.fr       */
+/*   Updated: 2023/11/22 14:16:53 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ char	*read_file(char *total_str, int fd)
 
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buffer)
-		return (free_total(total_str), NULL);
+		return (free_total(&total_str), NULL);
 	bytes = 1;
 	while (bytes)
 	{
 		bytes = read(fd, buffer, BUFFER_SIZE);
 		if (bytes < 0)
-			return (free_total(total_str), free(buffer), NULL);
+			return (free_total(&total_str), free(buffer), NULL);
 		buffer[bytes] = '\0';
 		if (bytes)
 		{
@@ -55,7 +55,7 @@ char	*extract_line(char *total_str)
 		len++;
 	line = (char *)malloc(len + 1);
 	if (!line)
-		return (free_total(total_str), NULL);
+		return (free_total(&total_str), NULL);
 	i = 0;
 	while (total_str[i] && i < len)
 	{
@@ -80,11 +80,11 @@ char	*new_total(t_data *total_data)
 		len++;
 	if (len)
 	{
-		new_t = (char *)malloc(len + 1);
+		new_t = (char *)malloc(len);
 		if (!new_t)
-			return (free_total(total_data->total_str), NULL);
+			return (free_total(&total_data->total_str), NULL);
 		ft_strcpy(new_t, total_data->total_str + i - len);
-		free_total(total_data->total_str);
+		free_total(&total_data->total_str);
 		return (new_t);
 	}
 	else
@@ -94,14 +94,13 @@ char	*new_total(t_data *total_data)
 	}
 }
 
-void	free_total(char *total_str)
+void	free_total(char **total_str)
 {
-	if (total_str)
+	if (*total_str)
 	{
-		free(total_str);
-		total_str = NULL;
+		free(*total_str);
+		*total_str = NULL;
 	}
-	
 }
 
 char	*get_next_line(int fd)
@@ -118,12 +117,12 @@ char	*get_next_line(int fd)
 			return (NULL);
 		line = extract_line(total_data.total_str);
 		if (!line)
-			return (free_total(total_data.total_str), NULL);
+			return (free_total(&total_data.total_str), NULL);
 		total_data.total_str = new_total(&total_data);
 		if (!total_data.total_str)
 			return (free(line), NULL);
 		return (line);
 	}
 	else
-		return (free_total(total_data.total_str), NULL);
+		return (free_total(&total_data.total_str), NULL);
 }

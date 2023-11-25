@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:25:24 by obouchta          #+#    #+#             */
-/*   Updated: 2023/11/22 10:36:01 by obouchta         ###   ########.fr       */
+/*   Updated: 2023/11/22 14:11:03 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,6 @@ char	*ft_strcpy(char *dest, char *src);
 int		ft_strchr(char *buffer, int c);
 size_t	ft_strlen(const char *s);
 char	*ft_strdup(const char *str);
-void	free_total(char *total_str);
+void	free_total(char **total_str);
 
 #endif
