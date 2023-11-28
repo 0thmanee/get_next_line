@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:25:45 by obouchta          #+#    #+#             */
-/*   Updated: 2023/11/28 20:41:22 by obouchta         ###   ########.fr       */
+/*   Updated: 2023/11/29 00:36:19 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*extract_line(char *total_str)
 		len++;
 	if (total_str[len] == '\n')
 		len++;
-	line = malloc((len + 1) *  sizeof(char));
+	line = malloc((len + 1) * sizeof(char));
 	if (!line)
 		return (free_total(&total_str), NULL);
 	i = 0;
@@ -80,7 +80,7 @@ char	*new_total(t_data *total_data)
 		len++;
 	if (len)
 	{
-		new_t = malloc(len *  sizeof(char));
+		new_t = malloc(len * sizeof(char));
 		if (!new_t)
 			return (free_total(&total_data->total_str), NULL);
 		ft_strcpy(new_t, total_data->total_str + i - len);
