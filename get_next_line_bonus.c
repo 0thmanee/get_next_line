@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/15 17:25:45 by obouchta          #+#    #+#             */
-/*   Updated: 2023/11/28 20:41:22 by obouchta         ###   ########.fr       */
+/*   Created: 2023/11/28 20:29:43 by obouchta          #+#    #+#             */
+/*   Updated: 2023/11/28 20:40:26 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*read_file(char *total_str, int fd)
 {
@@ -105,24 +105,24 @@ void	free_total(char **total_str)
 
 char	*get_next_line(int fd)
 {
-	static t_data	total_data;
+	static t_data	total_data[OPEN_MAX];
 	char			*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (total_data.end_file != 1)
+	if (total_data[fd].end_file != 1)
 	{
-		total_data.total_str = read_file(total_data.total_str, fd);
-		if (!total_data.total_str)
+		total_data[fd].total_str = read_file(total_data[fd].total_str, fd);
+		if (!total_data[fd].total_str)
 			return (NULL);
-		line = extract_line(total_data.total_str);
+		line = extract_line(total_data[fd].total_str);
 		if (!line)
-			return (free_total(&total_data.total_str), NULL);
-		total_data.total_str = new_total(&total_data);
-		if (!total_data.total_str)
+			return (free_total(&total_data[fd].total_str), NULL);
+		total_data[fd].total_str = new_total(&total_data[fd]);
+		if (!total_data[fd].total_str)
 			return (free(line), NULL);
 		return (line);
 	}
 	else
-		return (free_total(&total_data.total_str), NULL);
+		return (free_total(&total_data[fd].total_str), NULL);
 }
