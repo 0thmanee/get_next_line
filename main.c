@@ -12,7 +12,7 @@ int	main(void)
 	i = 0;
 	while (line)
 	{
-		printf("%d ==> (%s)\n", i,line);
+		printf("==> (%s)", line);
 		free(line);
 		line = get_next_line(fd);
 	}

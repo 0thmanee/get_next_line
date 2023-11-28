@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:25:45 by obouchta          #+#    #+#             */
-/*   Updated: 2023/11/22 14:16:53 by obouchta         ###   ########.fr       */
+/*   Updated: 2023/11/28 19:46:40 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,11 +108,12 @@ char	*get_next_line(int fd)
 	static t_data	total_data;
 	char			*line;
 
-	if (fd < 0 || BUFFER_SIZE < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	if (total_data.end_file != 1)
 	{
 		total_data.total_str = read_file(total_data.total_str, fd);
+		printf(" -- %s -- \n", total_data.total_str);
 		if (!total_data.total_str)
 			return (NULL);
 		line = extract_line(total_data.total_str);
