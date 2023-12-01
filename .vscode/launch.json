@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/obouchta/Desktop/get_next_line",
-      "program": "/Users/obouchta/Desktop/get_next_line/build/Debug/outDebug"
+      "cwd": "/Users/obouchta/Desktop/42_cursus/get_next_line",
+      "program": "/Users/obouchta/Desktop/42_cursus/get_next_line/build/Debug/outDebug"
     }
   ]
 }
